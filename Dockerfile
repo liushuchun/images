@@ -3,7 +3,7 @@ LABEL maintainer "liushuchun <liuscgood@gmail.com>"
 
 RUN sed -i s/archive.ubuntu.com/mirrors.163.com/g /etc/apt/sources.list
 RUN sed -i s/security.ubuntu.com/mirrors.163.com/g /etc/apt/sources.list
-# 这两个 NVIDIA source list 更新存在问题
+# 这两个 NVIDIA source list 更新存在问
 RUN rm /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
 
 # apt-get && python && pip
