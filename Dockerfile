@@ -1,4 +1,4 @@
-FROM nvidia/cuda:8.0-cudnn7-devel
+FROM nvidia/cuda:8.0-cudnn5-devel
 LABEL maintainer "liushuchun <liuscgood@gmail.com>"
 
 RUN sed -i s/archive.ubuntu.com/mirrors.163.com/g /etc/apt/sources.list
