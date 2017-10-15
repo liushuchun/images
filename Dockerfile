@@ -10,7 +10,7 @@ RUN rm /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates wget vim lrzsz curl git unzip build-essential cmake \
     python-dev python-pip python-tk \
-    libatlas-base-dev libopencv-dev libcurl4-openssl-dev \
+    libatlas-base-dev libopencv-dev liblapack-dev libopenblas-dev libcurl4-openssl-dev \
     libgtest-dev \
     openssh-server rsync && \
     cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib && \
@@ -45,12 +45,8 @@ RUN git clone -b master --depth 1 https://github.com/msracver/FCIS.git ${FCIS_RO
 
 # mxnet
 ENV MXNET_ROOT=/opt/mxnet MXNET_VER=0.11.0
-RUN mkdir -p ${MXNET_ROOT} && cd ${MXNET_ROOT} && git clone -b ${MXNET_VER} --depth 1 --recursive https://github.com/dmlc/mxnet . ; cd cub && git checkout v1.6.4 && cd .. && \
-    cp ${FCIS_ROOT}/fcis/operator_cxx/* ${MXNET_ROOT}/src/operator/contrib -r && \
-    pip install -U pip setuptools && pip install nose pylint numpy nose-timer requests && \
-    make -j"$(nproc)" USE_DIST_KVSTORE=1 USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 \
-    EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator && \
-    rm -rf build && cd ${MXNET_ROOT}/example/rcnn && make
+RUN mkdir -p ${MXNET_ROOT} && cd ${MXNET_ROOT} && git clone -b --depth 1 --recursive https://github.com/apache/incubator-mxnet.git mxnet --branch 0.11.0; cd mxnet \
+    make -j "$(nproc)" USE_DIST_KVSTORE=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1
 
 ENV PYTHONPATH $MXNET_ROOT/python:$PYFCIS_ROOT:$PYTHONPATH
 ENV PATH /usr/local/cuda/bin:$PATH
