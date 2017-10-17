@@ -1,4 +1,4 @@
-FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu14.04
+FROM wangjianyong/jupyter-cuda:7.5
 MAINTAINER liushuchun <liusc@gmail.com>
 
 # Install git, wget and other dependencies
