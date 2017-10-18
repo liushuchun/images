@@ -1,5 +1,19 @@
-FROM wangjianyong/jupyter-cuda:7.5
+FROM nvidia/cuda:8.0-cudnn5-devel
 MAINTAINER liushuchun <liusc@gmail.com>
+
+
+RUN apt-get update && apt-get install -y \
+    build-essential git libatlas-base-dev libopencv-dev python-opencv \
+    libcurl4-openssl-dev libgtest-dev cmake wget unzip
+
+RUN cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
+
+RUN apt-get update && apt-get install -y python-dev python3-dev
+
+RUN cd /tmp && wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python2 get-pip.py
+
+RUN pip2 install nose pylint numpy nose-timer requests
+RUN pip3 install nose pylint numpy nose-timer requests
 
 # Install git, wget and other dependencies
 RUN apt-get update && apt-get install -y \
@@ -10,21 +24,16 @@ RUN apt-get update && apt-get install -y \
   python-numpy \
   python-setuptools \
   wget
+
 RUN mkdir /workspace
 
-# Clone MXNet repo and move into it
-RUN cd /workspace && git clone --recursive https://github.com/dmlc/mxnet && cd mxnet &&  cp make/config.mk config.mk &&  sed -i 's/USE_BLAS = atlas/USE_BLAS = openblas/g' config.mk && sed -i 's/USE_CUDA = 0/USE_CUDA = 1/g' config.mk && sed -i 's/USE_CUDA_PATH = NONE/USE_CUDA_PATH = \/usr\/local\/cuda/g' config.mk && sed -i 's/USE_CUDNN = 0/USE_CUDNN = 1/g' config.mk && sed -i 's/USE_DIST_KVSTORE = 0/USE_DIST_KVSTORE = 1/g' config.mk &&  make -j"$(nproc)"
+ENV PYTHONPATH=/workspace/mxnet/python
+
+ENV BUILD_OPTS "USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas"
+RUN cd /workspace && git clone --recursive https://github.com/dmlc/mxnet && cd mxnet && \
+    make -j$(nproc) $BUILD_OPTS
 
 # Install Python package
 RUN cd /workspace/mxnet/python && python setup.py install
 
-# Add to Python path
-RUN echo "export PYTHONPATH=$MXNET_HOME/python:$PYTHONPATH" >> /root/.bashrc
-
-# Install pip
-RUN easy_install -U pip
-# Install graphviz and jupyter
-RUN pip install graphviz jupyter
-
-# Set ~/mxnet as working directory
-WORKDIR /workspace/mxnet
+WORKDIR /workspace/
