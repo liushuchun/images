@@ -19,7 +19,7 @@ RUN cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
 
 RUN apt-get update && apt-get install -y python-dev python3-dev
 
-RUN cd /tmp && wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && python2 get-pip.py
+
 
 #python package
 RUN pip install -U pip setuptools && pip install nose pylint numpy nose-timer requests
