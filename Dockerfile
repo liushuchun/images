@@ -70,7 +70,7 @@ ENV PATH /usr/local/cuda/bin:$PATH
 ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=1
 ENV KMP_AFFINITY=granularity=fine,compact,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0
 ENV OMP_NUM_THREADS=16
-ENV
+
 
 ENV BUILD_OPTS "USE_CUDA=1 USE_MKL2017 = 1 USE_MKL2017_EXPERIMENTAL = 1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator"
 RUN cd /workspace && git clone --recursive https://github.com/dmlc/mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r cd mxnet && \
