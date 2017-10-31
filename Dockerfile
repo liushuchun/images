@@ -73,7 +73,7 @@ ENV OMP_NUM_THREADS=16
 
 
 ENV BUILD_OPTS "USE_CUDA=1 USE_MKL2017 = 1 USE_MKL2017_EXPERIMENTAL = 1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator"
-RUN cd /workspace && git clone --recursive https://github.com/dmlc/mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r && cd mxnet && \
+RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r && cd mxnet && \
     make -j$(nproc) $BUILD_OPTS && cd ${MXNET_ROOT}/example/rcnn && make
 
 ENV PYTHONPATH $MXNET_ROOT/python:$PYFCIS_ROOT:$PYTHONPATH
