@@ -11,8 +11,7 @@ RUN apt-get update && apt-get install -y \
     build-essential git libatlas-base-dev  \
     libcurl4-openssl-dev libgtest-dev cmake wget unzip net-tools  python-dev python3-dev liblapacke-dev libopenblas-dev vim liblapacke-dev checkinstall graphviz openssh-server ssh  ca-certificates   lrzsz curl  unzip  cmake \
     python-dev python-pip python-tk libopenblas-dev \
-    libatlas-base-dev libcurl4-openssl-dev \
-    libgtest-dev python-setuptools
+    python-setuptools
 
 
 RUN cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
@@ -33,10 +32,7 @@ RUN service ssh start
 # Install git, wget and other dependencies
 RUN apt-get update && apt-get install -y \
   git \
-  libopenblas-dev \
-  python-dev \
   python-numpy \
-  python-setuptools \
   wget
 
 # Install Opencv into the workspace
@@ -68,15 +64,12 @@ ENV PYTHONPATH /workspace/mxnet/python:$PYFCIS_ROOT:$PYTHONPATH
 ENV MXNET_ROOT=/workspace/mxnet
 ENV PATH /usr/local/cuda/bin:$PATH
 ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=1
-ENV KMP_AFFINITY=granularity=fine,compact,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0
-ENV OMP_NUM_THREADS=16
 
 
-ENV BUILD_OPTS "USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator"
-RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r && cd mxnet && \
-    make -j$(nproc) $BUILD_OPTS && cd ${MXNET_ROOT}/example/rcnn && make
+RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r
+RUN cd /workspace/mxnet && make -j$(nproc) USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator && cd ${MXNET_ROOT}/example/rcnn && make
 
-ENV PYTHONPATH $MXNET_ROOT/python:$PYFCIS_ROOT:$PYTHONPATH
+ENV PYTHONPATH ${MXNET_ROOT}/python:$PYFCIS_ROOT:$PYTHONPATH
 
 # Install Python package
 RUN cd /workspace/mxnet/python && python setup.py install
