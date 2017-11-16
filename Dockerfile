@@ -67,7 +67,8 @@ ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=1
 
 
 RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r
-RUN cd /workspace/mxnet && make -j$(nproc) USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=${MXNET_ROOT}/example/rcnn/operator && cd ${MXNET_ROOT}/example/rcnn && make
+RUN cd /workspace/mxnet && make -j$(nproc) USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=/workspace/mxnet/example/rcnn/operator
+RUN cd ${MXNET_ROOT}/example/rcnn && make
 
 ENV PYTHONPATH ${MXNET_ROOT}/python:$PYFCIS_ROOT:$PYTHONPATH
 
