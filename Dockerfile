@@ -32,7 +32,7 @@ RUN service ssh start
 # Install git, wget and other dependencies
 RUN apt-get update && apt-get install -y \
   git \
-  python-numpy \
+  python-numpy  pkg-config \
   wget
 
 # Install Opencv into the workspace
