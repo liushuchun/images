@@ -9,7 +9,7 @@ RUN rm /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
 
 RUN apt-get update && apt-get install -y \
     build-essential git libatlas-base-dev  \
-    libcurl4-openssl-dev libgtest-dev cmake wget unzip net-tools  python-dev python3-dev liblapacke-dev libopenblas-dev vim liblapacke-dev checkinstall graphviz openssh-server ssh  ca-certificates   lrzsz curl  unzip  cmake \
+    libcurl4-openssl-dev libgtest-dev cmake wget unzip net-tools  python-dev python3-dev liblapacke-dev libopenblas-dev vim liblapacke-dev checkinstall  openssh-server ssh  ca-certificates   lrzsz curl  unzip  cmake \
     python-dev python-pip python-tk libopenblas-dev \
     python-setuptools
 

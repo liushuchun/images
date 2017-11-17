@@ -44,7 +44,6 @@ export OPENCV_CONTRIB_ROOT=/workspace/opencv-contrib OPENCV_ROOT=/workspace/open
     -D WITH_CUDA=ON -D BUILD_opencv_python2=ON -D BUILD_EXAMPLES=OFF .. && \
     make -j16 && make install && ldconfig
 
-mkdir /workspace
 
 export PYTHONPATH=/workspace/mxnet/python
 
