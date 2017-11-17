@@ -52,23 +52,19 @@ RUN export OPENCV_CONTRIB_ROOT=/workspace/opencv-contrib OPENCV_ROOT=/workspace/
     -D WITH_CUDA=ON -D BUILD_opencv_python2=ON -D BUILD_EXAMPLES=OFF .. && \
     make -j16 && make install && ldconfig
 
-# fcis
-ENV FCIS_ROOT=/opt/fcis
-ENV PYFCIS_ROOT=$FCIS_ROOT/fcis:$FCIS_ROOT/lib
-RUN git clone -b master --depth 1 https://github.com/msracver/FCIS.git ${FCIS_ROOT} && \
-    cd $FCIS_ROOT && sh init.sh
+
 
 #environment params
 ENV LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
 ENV PYTHONPATH /workspace/mxnet/python:$PYFCIS_ROOT:$PYTHONPATH
 ENV MXNET_ROOT=/workspace/mxnet
 ENV PATH /usr/local/cuda/bin:$PATH
-ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=1
+ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=0
 
 
-RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp ${FCIS_ROOT}/fcis/operator_cxx/* /workspace/mxnet/src/operator/contrib -r
-RUN cd /workspace/mxnet && make -j$(nproc) USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas EXTRA_OPERATORS=/workspace/mxnet/example/rcnn/operator
-RUN cd ${MXNET_ROOT}/example/rcnn && make
+RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp /workspace/mxnet/e /workspace/mxnet/src/operator/contrib -r
+RUN cd /workspace/mxnet && make -j16 USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas
+
 
 ENV PYTHONPATH ${MXNET_ROOT}/python:$PYFCIS_ROOT:$PYTHONPATH
 
