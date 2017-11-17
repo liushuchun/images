@@ -62,8 +62,7 @@ ENV PATH /usr/local/cuda/bin:$PATH
 ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=0
 
 
-RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&  cp /workspace/mxnet/e /workspace/mxnet/src/operator/contrib -r
-RUN cd /workspace/mxnet && make -j16 USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas
+RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&   cd /workspace/mxnet && make -j16 USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas
 
 
 ENV PYTHONPATH ${MXNET_ROOT}/python:$PYFCIS_ROOT:$PYTHONPATH
