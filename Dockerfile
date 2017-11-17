@@ -43,24 +43,17 @@ RUN export OPENCV_CONTRIB_ROOT=/workspace/opencv-contrib OPENCV_ROOT=/workspace/
     git clone -b ${OPENCV_VER} --depth 1 https://github.com/opencv/opencv_contrib.git ${OPENCV_CONTRIB_ROOT} && \
     mkdir -p ${OPENCV_ROOT}/build && cd ${OPENCV_ROOT}/build && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D OPENCV_ICV_URL="http://devtools.dl.atlab.ai/docker/" \
-    -D OPENCV_PROTOBUF_URL="http://devtools.dl.atlab.ai/docker/" \
-    -D OPENCV_CONTRIB_BOOSTDESC_URL="http://devtools.dl.atlab.ai/docker/" \
-    -D OPENCV_CONTRIB_VGG_URL="http://devtools.dl.atlab.ai/docker/" \
     -D INSTALL_C_EXAMPLES=OFF -D INSTALL_PYTHON_EXAMPLES=OFF \
     -D OPENCV_EXTRA_MODULES_PATH=${OPENCV_CONTRIB_ROOT}/modules \
     -D WITH_CUDA=ON -D BUILD_opencv_python2=ON -D BUILD_EXAMPLES=OFF .. && \
     make -j16 && make install && ldconfig
-
-
 
 #environment params
 ENV LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64/
 ENV PYTHONPATH /workspace/mxnet/python:$PYFCIS_ROOT:$PYTHONPATH
 ENV MXNET_ROOT=/workspace/mxnet
 ENV PATH /usr/local/cuda/bin:$PATH
-ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=0
-
+ENV MXNET_CUDNN_AUTOTUNE_DEFAULT=1
 
 RUN cd /workspace && git clone --recursive https://github.com/apache/incubator-mxnet.git mxnet &&   cd /workspace/mxnet && make -j16 USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda-8.0 USE_CUDNN=1 USE_OPENCV=1 USE_DIST_KVSTORE=1 USE_BLAS=openblas
 
