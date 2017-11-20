@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y python-dev python3-dev
 
 
 #python package
-RUN pip install -U pip setuptools && pip install nose pylint numpy nose-timer requests  -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+RUN pip install -U pip setuptools && pip install nose pylint numpy nose-timer requests
 
 
 #run ssh-server
